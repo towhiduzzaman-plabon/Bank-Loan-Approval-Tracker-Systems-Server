@@ -1,0 +1,73 @@
+# ============================
+#   Node.js / Express Server
+# ============================
+
+# Node modules
+node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build artifacts
+dist/
+build/
+.tmp/
+.temp/
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage reports
+coverage/
+*.lcov
+
+# Database dumps
+*.sql
+*.sqlite
+*.sqlite3
+dump.rdb
+*.bson
+*.mongodb
+
+# pm2
+.pids/
+pm2.log
+pm2-error.log
+
+# npm cache
+.npm/
+
+# ESLint cache
+.eslintcache
+
+# Editor folders
+.vscode/
+.idea/
+.history/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Mac system files
+.AppleDouble
+.LSOverride
+.Trashes
+._*
