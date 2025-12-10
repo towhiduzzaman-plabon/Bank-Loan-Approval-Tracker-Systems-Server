@@ -1,4 +1,3 @@
-// server/routes/application.routes.js
 import express from "express";
 import LoanApplication from "../models/LoanApplication.js";
 import Loan from "../models/Loan.js";
@@ -87,7 +86,7 @@ router.get(
 );
 
 /**
- * MANAGER: APPROVED APPLICATIONS  ✅ (এটাই তোমার Approved পেজের জন্য)
+ * MANAGER: APPROVED APPLICATIONS
  * GET /api/applications/manager/approved
  */
 router.get(
