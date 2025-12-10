@@ -1,4 +1,3 @@
-// server/routes/loan.routes.js
 import express from "express";
 import Loan from "../models/Loan.js";
 import { verifyJWT } from "../middleware/verifyJWT.js";
@@ -6,10 +5,7 @@ import { verifyRole } from "../middleware/verifyRole.js";
 
 const router = express.Router();
 
-/**
- * GET /api/loans/home
- * Home page এ ৬টা loan
- */
+
 router.get("/home", async (req, res) => {
   try {
     const loans = await Loan.find()
@@ -23,11 +19,7 @@ router.get("/home", async (req, res) => {
   }
 });
 
-/**
- * GET /api/loans
- * All Loans page (public)
- * query: search, category, page, limit
- */
+
 router.get("/", async (req, res) => {
   try {
     const { search = "", category, page = 1, limit = 9 } = req.query;
@@ -63,11 +55,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-/**
- * GET /api/loans/manager/mine
- * Manager -> নিজের create করা loans (Manage Loans page)
- * optional: ?search=...
- */
+
 router.get(
   "/manager/mine",
   verifyJWT,

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-// LoanApplication model schema
+
 const loanApplicationSchema = new mongoose.Schema(
   {
     borrower: {
