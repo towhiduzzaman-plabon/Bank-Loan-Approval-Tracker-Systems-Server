@@ -1,4 +1,3 @@
-// server/routes/user.routes.js
 import express from "express";
 import User from "../models/User.js";
 
