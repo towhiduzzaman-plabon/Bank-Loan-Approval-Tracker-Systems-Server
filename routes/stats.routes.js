@@ -1,4 +1,3 @@
-// server/routes/stats.routes.js
 import express from "express";
 import { verifyJWT } from "../middleware/verifyJWT.js";
 import { verifyRole } from "../middleware/verifyRole.js";
@@ -7,20 +6,15 @@ import LoanApplication from "../models/LoanApplication.js";
 
 const router = express.Router();
 
-/**
- * GET /api/stats/dashboard
- *
- * - admin / manager: সব লোন + সব অ্যাপ্লিকেশনের status অনুযায়ী কাউন্ট
- * - borrower: শুধু নিজের application গুলো থেকে pending / approved কাউন্ট
- */
+
 router.get("/dashboard", verifyJWT, async (req, res) => {
   try {
-    const user = req.user; // verifyJWT থেকে আসবে
+    const user = req.user; // verifyJWT
 
-    // সব role-এর জন্য total loans একই থাকবে
+  
     const totalLoans = await Loan.countDocuments();
 
-    // borrower হলে তার নিজের applications, নইলে সবগুলো
+    
     const match = {};
     if (user.role === "borrower") {
       match.borrower = user.id;
