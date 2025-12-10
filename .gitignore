@@ -20,6 +20,7 @@ lerna-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
+loan-approval-tracker-system-firebase-adminsdk-fbsvc.json
 
 # Build artifacts
 dist/
