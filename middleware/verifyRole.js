@@ -1,6 +1,3 @@
-// server/middleware/verifyRole.js
-
-// allowedRoles = ["borrower"], ["admin"], ["manager"] ইত্যাদি
 export const verifyRole = (...allowedRoles) => {
   return (req, res, next) => {
     const userRole = req.user?.role;

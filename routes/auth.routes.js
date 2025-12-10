@@ -1,4 +1,3 @@
-// server/routes/auth.routes.js
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
@@ -23,10 +22,10 @@ router.post("/jwt", async (req, res) => {
 
     let user = await User.findOne({ email });
 
-    const forcedRole = getRole(email); // role detection
+    const forcedRole = getRole(email);
 
     if (!user) {
-      // নতুন user → role সরাসরি assign
+      
       user = await User.create({
         email,
         name: name || "User",
@@ -34,14 +33,14 @@ router.post("/jwt", async (req, res) => {
         role: forcedRole,
       });
     } else {
-      // পুরোনো user হলেও role ভুল থাকলে force update
+      // update role if needed
       if (user.role !== forcedRole) {
         user.role = forcedRole;
         await user.save();
       }
     }
 
-    // JWT তৈরি
+    // JWT create
     const token = jwt.sign(
       { id: user._id, email: user.email, role: user.role },
       process.env.JWT_SECRET,
