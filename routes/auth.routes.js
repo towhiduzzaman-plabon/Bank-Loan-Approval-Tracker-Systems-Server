@@ -4,41 +4,56 @@ import User from "../models/User.js";
 
 const router = express.Router();
 
-// decide correct role
-const getRole = (email) => {
-  const adminEmail = process.env.ADMIN_EMAIL?.trim();
-  const managerEmail = process.env.MANAGER_EMAIL?.trim();
-
-  if (email === adminEmail) return "admin";
-  if (email === managerEmail) return "manager";
-  return "borrower";
-};
-
 router.post("/jwt", async (req, res) => {
   try {
     const { email, name, photoURL } = req.body;
 
     if (!email) return res.status(400).json({ message: "Email required" });
 
-    let user = await User.findOne({ email });
+    // ১. ইমেইল সব সময় ছোট হাতের অক্ষরে কনভার্ট করে নিন
+    const userEmail = email.toLowerCase();
+    
+    // Debugging: কনসোলে দেখুন আসলে কী ইমেইল আসছে
+    console.log("Login Attempt:", userEmail);
+    console.log("Admin Email in ENV:", process.env.ADMIN_EMAIL);
 
-    const forcedRole = getRole(email);
+    let user = await User.findOne({ email: userEmail });
 
-    if (!user) {
-      
-      user = await User.create({
-        email,
-        name: name || "User",
-        photoURL,
-        role: forcedRole,
-      });
-    } else {
-      // update role if needed
-      if (user.role !== forcedRole) {
-        user.role = forcedRole;
-        await user.save();
-      }
+    // ২. রোল নির্ধারণের লজিক (Role Determination Logic)
+    let finalRole = "borrower"; // ডিফল্ট
+
+    // যদি ইউজার আগে থেকেই থাকে, তার বর্তমান রোলটিই আমরা রাখব
+    if (user) {
+      finalRole = user.role;
     }
+
+    // ৩. কিন্তু যদি .env এর সাথে মিলে যায়, তবে অবশ্যই ADMIN হতে হবে (Override)
+    const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+    const managerEmail = process.env.MANAGER_EMAIL?.trim().toLowerCase();
+
+    if (userEmail === adminEmail) {
+      finalRole = "admin";
+    } else if (userEmail === managerEmail) {
+      finalRole = "manager";
+    }
+
+    // ৪. ডাটাবেস অপারেশন (Update or Create)
+    // এখানে findOneAndUpdate ব্যবহার করা নিরাপদ
+    const updateDoc = {
+      $set: {
+        email: userEmail,
+        name: name || "User",
+        photoURL: photoURL,
+        role: finalRole, // এখানে ক্যালকুলেটেড রোলটি বসবে
+      },
+    };
+
+    // upsert: true মানে হলো ইউজার না থাকলে বানাবে, থাকলে আপডেট করবে
+    user = await User.findOneAndUpdate(
+      { email: userEmail },
+      updateDoc,
+      { new: true, upsert: true }
+    );
 
     // JWT create
     const token = jwt.sign(
