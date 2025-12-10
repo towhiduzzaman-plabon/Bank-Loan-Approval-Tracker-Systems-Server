@@ -1,4 +1,3 @@
-// server/config/db.js
 import mongoose from "mongoose";
 
 const connectDB = async () => {
@@ -9,12 +8,12 @@ const connectDB = async () => {
     }
 
     await mongoose.connect(uri, {
-      dbName: "loanlink", // চাইলে নিজের মত নাম দাও
+      dbName: "loanlink",
     });
 
-    console.log("✅ MongoDB connected");
+    console.log(" MongoDB connected");
   } catch (error) {
-    console.error("❌ MongoDB connection failed:", error.message);
+    console.error(" MongoDB connection failed:", error.message);
     throw error;
   }
 };
