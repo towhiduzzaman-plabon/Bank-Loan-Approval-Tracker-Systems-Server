@@ -50,7 +50,7 @@ router.post(
   }
 );
 
-// confirm payment (client e success page e hit korbe)
+// confirm payment and save record
 router.post("/confirm", verifyJWT, async (req, res) => {
   try {
     const { sessionId, applicationId } = req.body;
@@ -79,7 +79,7 @@ router.post("/confirm", verifyJWT, async (req, res) => {
   }
 });
 
-// get payment details by applicationId
+// get payment by application id
 router.get(
   "/by-application/:id",
   verifyJWT,
