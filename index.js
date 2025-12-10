@@ -3,7 +3,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-
 import authRoutes from "./routes/auth.routes.js";
 import applicationRoutes from "./routes/application.routes.js";
 import loanRoutes from "./routes/loan.routes.js";
@@ -17,7 +16,7 @@ const port = process.env.PORT || 3000;
 
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL || "http://localhost:5173"],
+    origin: [process.env.CLIENT_URL || "http://localhost:5173" , "https://loanlink-client.vercel.app"],
     credentials: true,
   })
 );
