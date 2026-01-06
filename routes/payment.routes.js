@@ -23,6 +23,11 @@ router.post(
       if (app.feeStatus === "Paid")
         return res.status(400).json({ message: "Already paid" });
 
+      const clientUrl = process.env.CLIENT_URL || 'https://loanlink-client.vercel.app';
+      if (!process.env.CLIENT_URL) {
+        console.warn("Warning: CLIENT_URL is not set in environment; using fallback", clientUrl);
+      }
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         mode: "payment",
@@ -39,8 +44,8 @@ router.post(
             quantity: 1
           }
         ],
-        success_url: `${process.env.CLIENT_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}&applicationId=${app._id}`,
-        cancel_url: `${process.env.CLIENT_URL}/dashboard/my-loans`
+        success_url: `${clientUrl}/payment-success?session_id={CHECKOUT_SESSION_ID}&applicationId=${app._id}`,
+        cancel_url: `${clientUrl}/dashboard/my-loans`
       });
 
       res.json({ url: session.url });

@@ -20,6 +20,8 @@ lerna-debug.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+.env.example
 loan-approval-tracker-system-firebase-adminsdk-fbsvc.json
 
 # Build artifacts
@@ -73,3 +75,5 @@ desktop.ini
 .Trashes
 ._*
 .vercel
+.env*.local
+.env.*

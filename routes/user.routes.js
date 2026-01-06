@@ -1,10 +1,12 @@
 import express from "express";
 import User from "../models/User.js";
+import { verifyJWT } from "../middleware/verifyJWT.js";
+import { verifyRole } from "../middleware/verifyRole.js";
 
 const router = express.Router();
 
 // GET /api/users?search=&role=&status=&page=&limit=
-router.get("/", async (req, res) => {
+router.get("/", verifyJWT, verifyRole("admin"), async (req, res) => {
   try {
     const {
       search = "",
@@ -47,7 +49,7 @@ router.get("/", async (req, res) => {
 });
 
 // PATCH /api/users/:id  (role / status update)
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", verifyJWT, verifyRole("admin"), async (req, res) => {
   try {
     const { role, status, suspendReason, suspendFeedback } = req.body;
 

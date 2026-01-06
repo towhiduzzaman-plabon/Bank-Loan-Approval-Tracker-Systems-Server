@@ -1,6 +1,7 @@
 import express from "express";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { verifyJWT } from "../middleware/verifyJWT.js";
 
 const router = express.Router();
 
@@ -64,6 +65,12 @@ router.post("/jwt", async (req, res) => {
 
     const isProd = process.env.COOKIE_SECURE === "true";
 
+    if (process.env.NODE_ENV === "production" && !isProd) {
+      console.warn(
+        "COOKIE_SECURE is not set to 'true' in production; cross-site cookies may be blocked. Set COOKIE_SECURE=true in your hosting environment."
+      );
+    }
+
     res
       .cookie("token", token, {
         httpOnly: true,
@@ -80,6 +87,28 @@ router.post("/jwt", async (req, res) => {
     console.error("JWT ERROR:", error);
     res.status(500).json({ message: error.message });
   }
+});
+
+// get current authenticated user (via cookie)
+router.get("/me", verifyJWT, async (req, res) => {
+  try {
+    const { id, email, role } = req.user;
+    res.json({ success: true, id, email, role });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// logout and clear cookie
+router.post("/logout", (req, res) => {
+  const isProd = process.env.COOKIE_SECURE === "true";
+  res
+    .clearCookie("token", {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+    })
+    .json({ success: true });
 });
 
 export default router;

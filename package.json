@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "seed:users": "node scripts/seedUsers.js"
   },
   "dependencies": {
     "cookie-parser": "^1.4.6",
